@@ -700,12 +700,9 @@ const buildSpacing = (lineSpacing, beforeSpacing, afterSpacing) => {
   if (lineSpacing) {
     spacingFragment.att('@w', 'line', lineSpacing);
   }
-  if (beforeSpacing) {
-    spacingFragment.att('@w', 'before', beforeSpacing);
-  }
-  if (afterSpacing) {
-    spacingFragment.att('@w', 'after', afterSpacing);
-  }
+
+  spacingFragment.att('@w', 'before', beforeSpacing || 0);
+  spacingFragment.att('@w', 'after', afterSpacing || 0);
 
   spacingFragment.att('@w', 'lineRule', 'auto').up();
 
