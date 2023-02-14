@@ -1080,7 +1080,7 @@ const buildTableCellBorders = (tableCellBorder) => {
     'tcBorders'
   );
 
-  const { color, stroke, ...borders } = tableCellBorder;
+  const { color = 'ffffff', stroke, ...borders } = tableCellBorder;
   Object.keys(borders).forEach((border) => {
     if (tableCellBorder[border]) {
       const borderFragment = buildBorder(border, tableCellBorder[border], 0, color, stroke);
@@ -1546,7 +1546,7 @@ const buildTableBorders = (tableBorder) => {
     'tblBorders'
   );
 
-  const { color, stroke, ...borders } = tableBorder;
+  const { color = fixupColorCode('white'), stroke, ...borders } = tableBorder;
 
   Object.keys(borders).forEach((border) => {
     if (borders[border]) {
@@ -1637,7 +1637,10 @@ const buildTableProperties = (attributes) => {
 };
 
 const cssBorderParser = (borderString) => {
-  let [size, stroke, color] = borderString.split(' ');
+  // eslint-disable-next-line prefer-const
+  let [size, stroke, ...colorParts] = borderString.split(' ');
+
+  let color = colorParts.join('');
 
   if (pointRegex.test(size)) {
     const matchedParts = size.match(pointRegex);
@@ -1663,7 +1666,7 @@ const buildTable = async (vNode, attributes, docxDocumentInstance) => {
     const tableStyles = vNode.properties.style || {};
     const tableBorders = {};
     const tableCellBorders = {};
-    let [borderSize, borderStrike, borderColor] = [2, 'single', '000000'];
+    let [borderSize, borderStrike, borderColor] = [2, 'single', 'ffffff'];
 
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(tableAttributes.border)) {
