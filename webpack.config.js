@@ -21,4 +21,7 @@ module.exports = {
     },
   },
   optimization: {},
+  output: {
+    filename: 'htmltodocx.js',
+  },
 };
