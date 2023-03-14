@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { create, fragment } from 'xmlbuilder2';
 import { nanoid } from 'nanoid';
 
@@ -91,7 +92,18 @@ async function generateSectionXML(vTree, type = 'header') {
   const XMLFragment = fragment();
   await convertVTreeToXML(this, vTree, XMLFragment);
   if (type === 'footer' && XMLFragment.first().node.tagName === 'p' && this.pageNumber) {
-    XMLFragment.first().import(
+    XMLFragment.map((node, index) => {
+      // eslint-disable-next-line no-underscore-dangle
+      console.log(
+        '==>> node: ',
+        index,
+        node.node.tagName,
+        node.node.textContent.length,
+        `"${node.node._firstChild?.tagName ?? 'haha'}"`
+      );
+      return true;
+    });
+    XMLFragment.last().import(
       fragment({ namespaceAlias: { w: namespaces.w } })
         .ele('@w', 'fldSimple')
         .att('@w', 'instr', 'PAGE')
