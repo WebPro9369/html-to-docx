@@ -203,12 +203,22 @@ const buildBorder = (
     .att('@w', 'color', borderColor)
     .up();
 
-const buildTextElement = (text) =>
-  fragment({ namespaceAlias: { w: namespaces.w } })
+const buildTextElement = (text) => {
+  // handle artificial 'tab's
+  if (text.length === 12 && !text.trim().length) {
+    console.log('11oh tab!');
+    return fragment({ namespaceAlias: { w: namespaces.w } })
+      .ele('@w', 'tab')
+      .att('@xml', 'space', 'preserve')
+      .up();
+  }
+
+  return fragment({ namespaceAlias: { w: namespaces.w } })
     .ele('@w', 't')
     .att('@xml', 'space', 'preserve')
     .txt(text)
     .up();
+};
 
 // eslint-disable-next-line consistent-return
 const fixupLineHeight = (lineHeight, fontSize) => {
@@ -448,6 +458,15 @@ const buildRun = async (vNode, attributes, docxDocumentInstance) => {
   const runFragment = fragment({ namespaceAlias: { w: namespaces.w } }).ele('@w', 'r');
   const runPropertiesFragment = buildRunProperties(cloneDeep(attributes));
 
+  // console.log('===>>> tag name: ', vNode?.tagName, attributes, vNode);
+  console.log(
+    '==>> is vnode: ',
+    isVNode(vNode),
+    isVText(vNode),
+    vNode.text,
+    vNode.text?.length,
+    vNode.text.trim().length
+  );
   // case where we have recursive spans representing font changes
   if (isVNode(vNode) && vNode.tagName === 'span') {
     // eslint-disable-next-line no-use-before-define
