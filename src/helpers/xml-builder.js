@@ -206,7 +206,6 @@ const buildBorder = (
 const buildTextElement = (text) => {
   // handle artificial 'tab's
   if (text.length === 12 && !text.trim().length) {
-    console.log('11oh tab!');
     return fragment({ namespaceAlias: { w: namespaces.w } })
       .ele('@w', 'tab')
       .att('@xml', 'space', 'preserve')
