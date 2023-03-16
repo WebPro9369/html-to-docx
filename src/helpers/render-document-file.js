@@ -322,7 +322,8 @@ export async function convertVTreeToXML(docxDocumentInstance, vTree, xmlFragment
 }
 
 async function renderDocumentFile(docxDocumentInstance) {
-  const vTree = convertHTML(docxDocumentInstance.htmlString);
+  console.log('render document: ', docxDocumentInstance);
+  const vTree = convertHTML(docxDocumentInstance.htmlString?.replace(/&nbsp;/g, ' '));
 
   const xmlFragment = fragment({ namespaceAlias: { w: namespaces.w } });
 
