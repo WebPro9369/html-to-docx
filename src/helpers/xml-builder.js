@@ -1306,10 +1306,27 @@ const buildTableCell = async (vNode, attributes, rowSpanMap, columnIndex, docxDo
   }
   const tableCellPropertiesFragment = buildTableCellProperties(modifiedAttributes);
   tableCellFragment.import(tableCellPropertiesFragment);
+
+  // checks if a node is a block in table cell
+  const checkNodeIsBlockInTableCell = (node) => {
+    if (!node || !isVNode(node)) {
+      return false;
+    }
+
+    const { tagName } = node;
+    return tagName === 'img' || tagName === 'figure' || ['ul', 'ol'].includes(tagName);
+  };
+
   if (vNodeHasChildren(vNode)) {
+    let isPrevItemBlock = false;
+    const clonedVNode = cloneDeep(vNode);
+    clonedVNode.children = [];
+
     for (let index = 0; index < vNode.children.length; index++) {
       const childVNode = vNode.children[index];
+      const nextChildVNode = vNode.children[index + 1];
       if (isVNode(childVNode) && childVNode.tagName === 'img') {
+        isPrevItemBlock = true;
         const imageFragment = await buildImage(
           docxDocumentInstance,
           childVNode,
@@ -1319,6 +1336,7 @@ const buildTableCell = async (vNode, attributes, rowSpanMap, columnIndex, docxDo
           tableCellFragment.import(imageFragment);
         }
       } else if (isVNode(childVNode) && childVNode.tagName === 'figure') {
+        isPrevItemBlock = true;
         if (vNodeHasChildren(childVNode)) {
           // eslint-disable-next-line no-plusplus
           for (let iteratorIndex = 0; iteratorIndex < childVNode.children.length; iteratorIndex++) {
@@ -1336,18 +1354,34 @@ const buildTableCell = async (vNode, attributes, rowSpanMap, columnIndex, docxDo
           }
         }
       } else if (isVNode(childVNode) && ['ul', 'ol'].includes(childVNode.tagName)) {
+        isPrevItemBlock = true;
         // render list in table
         if (vNodeHasChildren(childVNode)) {
           await buildList(childVNode, docxDocumentInstance, tableCellFragment);
         }
       } else {
-        const paragraphFragment = await buildParagraph(
-          childVNode,
-          modifiedAttributes,
-          docxDocumentInstance
-        );
+        // build a new node with non-block & consecutive children
+        // this will prevent additional linebreaks from unnecessary blocks getting added
+        if (isPrevItemBlock) {
+          console.log('===>>> init children: ', childVNode);
+          clonedVNode.children = [];
+        }
+        clonedVNode.children.push(childVNode);
 
-        tableCellFragment.import(paragraphFragment);
+        // if next child node is a block, then render non-blocks accumulated so far
+        if (!nextChildVNode || checkNodeIsBlockInTableCell(nextChildVNode)) {
+          console.log('========================================');
+          console.log('==>> vnode: ', clonedVNode);
+          const paragraphFragment = await buildParagraph(
+            clonedVNode,
+            modifiedAttributes,
+            docxDocumentInstance
+          );
+
+          tableCellFragment.import(paragraphFragment);
+        }
+
+        isPrevItemBlock = false;
       }
     }
   } else {
