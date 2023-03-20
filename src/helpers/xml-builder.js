@@ -1363,15 +1363,12 @@ const buildTableCell = async (vNode, attributes, rowSpanMap, columnIndex, docxDo
         // build a new node with non-block & consecutive children
         // this will prevent additional linebreaks from unnecessary blocks getting added
         if (isPrevItemBlock) {
-          console.log('===>>> init children: ', childVNode);
           clonedVNode.children = [];
         }
         clonedVNode.children.push(childVNode);
 
         // if next child node is a block, then render non-blocks accumulated so far
         if (!nextChildVNode || checkNodeIsBlockInTableCell(nextChildVNode)) {
-          console.log('========================================');
-          console.log('==>> vnode: ', clonedVNode);
           const paragraphFragment = await buildParagraph(
             clonedVNode,
             modifiedAttributes,
