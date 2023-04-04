@@ -300,7 +300,7 @@ const fixupMargin = (marginString) => {
   }
 };
 
-function applyTextTransform(text, style) {
+const applyTextTransform = (text, style) => {
   const transform = style['text-transform'];
 
   switch (transform) {
@@ -313,9 +313,9 @@ function applyTextTransform(text, style) {
     default:
       return text;
   }
-}
+};
 
-function processChildNodes(node, style) {
+const processChildNodes = (node, style = {}) => {
   for (let i = 0; i < node.children.length; i++) {
     const childNode = node.children[i];
 
@@ -325,7 +325,7 @@ function processChildNodes(node, style) {
       processChildNodes(childNode, style);
     }
   }
-}
+};
 
 const modifiedStyleAttributesBuilder = (vNode, attributes, options) => {
   const modifiedAttributes = { ...attributes };
@@ -364,8 +364,7 @@ const modifiedStyleAttributesBuilder = (vNode, attributes, options) => {
       modifiedAttributes.strong = vNode.properties.style['font-weight'];
     }
     if (vNode.properties.style['text-transform']) {
-      console.log('==>> text transform: ', vNode.text, vNode);
-      processChildNodes(vNode, null, vNode.properties.style);
+      processChildNodes(vNode, vNode.properties.style);
     }
     if (vNode.properties.style['font-size']) {
       modifiedAttributes.fontSize = fixupFontSize(vNode.properties.style['font-size']);
