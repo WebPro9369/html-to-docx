@@ -300,6 +300,33 @@ const fixupMargin = (marginString) => {
   }
 };
 
+function applyTextTransform(text, style) {
+  const transform = style['text-transform'];
+
+  switch (transform) {
+    case 'uppercase':
+      return text.toUpperCase();
+    case 'lowercase':
+      return text.toLowerCase();
+    case 'capitalize':
+      return text.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase());
+    default:
+      return text;
+  }
+}
+
+function processChildNodes(node, style) {
+  for (let i = 0; i < node.children.length; i++) {
+    const childNode = node.children[i];
+
+    if (isVText(childNode)) {
+      childNode.text = applyTextTransform(childNode.text ?? '', style);
+    } else {
+      processChildNodes(childNode, style);
+    }
+  }
+}
+
 const modifiedStyleAttributesBuilder = (vNode, attributes, options) => {
   const modifiedAttributes = { ...attributes };
 
@@ -335,6 +362,10 @@ const modifiedStyleAttributesBuilder = (vNode, attributes, options) => {
     // FIXME: remove bold check when other font weights are handled.
     if (vNode.properties.style['font-weight'] && vNode.properties.style['font-weight'] === 'bold') {
       modifiedAttributes.strong = vNode.properties.style['font-weight'];
+    }
+    if (vNode.properties.style['text-transform']) {
+      console.log('==>> text transform: ', vNode.text, vNode);
+      processChildNodes(vNode, null, vNode.properties.style);
     }
     if (vNode.properties.style['font-size']) {
       modifiedAttributes.fontSize = fixupFontSize(vNode.properties.style['font-size']);
