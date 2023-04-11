@@ -1,6 +1,6 @@
 import namespaces from '../namespaces';
 
-const generateDocumentTemplate = (width, height, orientation, margins) => `
+const generateDocumentTemplate = (width, height, orientation, margins, pagenumberStartAt = 1) => `
   <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 
     <w:document
@@ -27,6 +27,7 @@ const generateDocumentTemplate = (width, height, orientation, margins) => `
                         w:header="${margins.header}"
                         w:footer="${margins.footer}"
                         w:gutter="${margins.gutter}"/>
+                <w:pgNumType w:start="${pagenumberStartAt}"/>
             </w:sectPr>
         </w:body>
     </w:document>
