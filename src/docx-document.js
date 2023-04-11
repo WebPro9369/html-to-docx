@@ -151,6 +151,7 @@ class DocxDocument {
     this.tableRowCantSplit =
       (properties.table && properties.table.row && properties.table.row.cantSplit) || false;
     this.pageNumber = properties.pageNumber || false;
+    this.pageNumberStartAt = properties.pageNumberStartAt || 1;
     this.skipFirstHeaderFooter = properties.skipFirstHeaderFooter || false;
     this.lineNumber = properties.lineNumber ? properties.lineNumberOptions : null;
 
@@ -198,7 +199,13 @@ class DocxDocument {
   generateDocumentXML() {
     const documentXML = create(
       { encoding: 'UTF-8', standalone: true },
-      generateDocumentTemplate(this.width, this.height, this.orientation, this.margins)
+      generateDocumentTemplate(
+        this.width,
+        this.height,
+        this.orientation,
+        this.margins,
+        this.skipFirstHeaderFooter ? this.pageNumberStartAt - 1 : this.pageNumberStartAt
+      )
     );
     documentXML.root().first().import(this.documentXML);
 
