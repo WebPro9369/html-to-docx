@@ -204,7 +204,7 @@ class DocxDocument {
         this.height,
         this.orientation,
         this.margins,
-        this.skipFirstHeaderFooter ? this.pageNumberStartAt - 1 : this.pageNumberStartAt
+        this.pageNumberStartAt
       )
     );
     documentXML.root().first().import(this.documentXML);
