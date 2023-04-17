@@ -1389,6 +1389,15 @@ const buildTableCell = async (vNode, attributes, rowSpanMap, columnIndex, docxDo
         if (vNodeHasChildren(childVNode)) {
           await buildList(childVNode, docxDocumentInstance, tableCellFragment);
         }
+      } else if (isVNode(childVNode) && childVNode.tagName === 'p') {
+        isPrevItemBlock = true;
+        // render paragraphs (<p> tags)
+        const paragraphFragment = await buildParagraph(
+          childVNode,
+          modifiedAttributes,
+          docxDocumentInstance
+        );
+        tableCellFragment.import(paragraphFragment);
       } else {
         // build a new node with non-block & consecutive children
         // this will prevent additional linebreaks from unnecessary blocks getting added
