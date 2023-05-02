@@ -1142,8 +1142,9 @@ const buildTableCellWidth = (tableCellWidth) =>
 const buildTableCellMinWidth = (tableCellWidth) =>
   fragment({ namespaceAlias: { w: namespaces.w } })
     .ele('@w', 'tcW')
-    .att('@w', 'min', fixupColumnWidth(tableCellWidth))
-    .att('@w', 'type', 'auto')
+    .att('@w', 'w', fixupColumnWidth(tableCellWidth))
+    .att('@w', 'type', 'dxa')
+    .att('@w', 'tcFitText', '1')
     .up();
 
 const buildTableCellProperties = (attributes) => {
@@ -1193,7 +1194,7 @@ const buildTableCellProperties = (attributes) => {
     });
 
     if (!attributes.width) {
-      const minWidthFragment = buildTableCellMinWidth('40px');
+      const minWidthFragment = buildTableCellMinWidth('8px');
       tableCellPropertiesFragment.import(minWidthFragment);
     }
   }
@@ -1639,9 +1640,9 @@ const buildTableBorders = (tableBorder) => {
 
   const { color = fixupColorCode('white'), stroke, ...borders } = tableBorder;
 
-  Object.keys(borders).forEach((border) => {
-    if (borders[border]) {
-      const borderFragment = buildBorder(border, borders[border], 0, color, stroke);
+  Object.keys(borders).forEach((side) => {
+    if (borders[side]) {
+      const borderFragment = buildBorder(side, borders[side], 0, color, stroke);
       tableBordersFragment.import(borderFragment);
     }
   });
@@ -1715,7 +1716,7 @@ const buildTableProperties = (attributes) => {
       }
     });
   }
-  const tableCellMarginFragment = buildTableCellMargins(0);
+  const tableCellMarginFragment = buildTableCellMargins(160);
   tablePropertiesFragment.import(tableCellMarginFragment);
 
   // by default, all tables are center aligned.
@@ -1757,7 +1758,7 @@ const buildTable = async (vNode, attributes, docxDocumentInstance) => {
     const tableStyles = vNode.properties.style || {};
     const tableBorders = {};
     const tableCellBorders = {};
-    let [borderSize, borderStrike, borderColor] = [2, 'single', 'ffffff'];
+    let [borderSize, borderStrike, borderColor] = [2, 'single', 'b3b3b3'];
 
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(tableAttributes.border)) {
@@ -1783,12 +1784,8 @@ const buildTable = async (vNode, attributes, docxDocumentInstance) => {
       tableBorders.insideV = borderSize;
       tableBorders.insideH = borderSize;
     } else {
-      tableBorders.insideV = 0;
-      tableBorders.insideH = 0;
-      tableCellBorders.top = 1;
-      tableCellBorders.bottom = 1;
-      tableCellBorders.left = 1;
-      tableCellBorders.right = 1;
+      tableBorders.insideV = 2;
+      tableBorders.insideH = 2;
     }
 
     modifiedAttributes.tableBorder = tableBorders;
