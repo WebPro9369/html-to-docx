@@ -1144,7 +1144,7 @@ const buildTableCellMinWidth = (tableCellWidth) =>
     .ele('@w', 'tcW')
     .att('@w', 'w', fixupColumnWidth(tableCellWidth))
     .att('@w', 'type', 'dxa')
-    .att('@w', 'tcFitText', '1')
+    // .att('@w', 'tcFitText', '1')
     .up();
 
 const buildTableCellProperties = (attributes) => {
@@ -1716,7 +1716,7 @@ const buildTableProperties = (attributes) => {
       }
     });
   }
-  const tableCellMarginFragment = buildTableCellMargins(160);
+  const tableCellMarginFragment = buildTableCellMargins(0);
   tablePropertiesFragment.import(tableCellMarginFragment);
 
   // by default, all tables are center aligned.
@@ -1758,7 +1758,7 @@ const buildTable = async (vNode, attributes, docxDocumentInstance) => {
     const tableStyles = vNode.properties.style || {};
     const tableBorders = {};
     const tableCellBorders = {};
-    let [borderSize, borderStrike, borderColor] = [2, 'single', 'b3b3b3'];
+    let [borderSize, borderStrike, borderColor] = [2, 'single', 'ffffff'];
 
     // eslint-disable-next-line no-restricted-globals
     if (!isNaN(tableAttributes.border)) {
@@ -1784,8 +1784,12 @@ const buildTable = async (vNode, attributes, docxDocumentInstance) => {
       tableBorders.insideV = borderSize;
       tableBorders.insideH = borderSize;
     } else {
-      tableBorders.insideV = 2;
-      tableBorders.insideH = 2;
+      tableBorders.insideV = 0;
+      tableBorders.insideH = 0;
+      tableCellBorders.top = 1;
+      tableCellBorders.bottom = 1;
+      tableCellBorders.left = 1;
+      tableCellBorders.right = 1;
     }
 
     modifiedAttributes.tableBorder = tableBorders;
