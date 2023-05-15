@@ -1139,13 +1139,13 @@ const buildTableCellWidth = (tableCellWidth) =>
     .att('@w', 'type', 'dxa')
     .up();
 
-const buildTableCellMinWidth = (tableCellWidth) =>
-  fragment({ namespaceAlias: { w: namespaces.w } })
-    .ele('@w', 'tcW')
-    .att('@w', 'w', fixupColumnWidth(tableCellWidth))
-    .att('@w', 'type', 'dxa')
-    // .att('@w', 'tcFitText', '1')
-    .up();
+// const buildTableCellMinWidth = (tableCellWidth) =>
+//   fragment({ namespaceAlias: { w: namespaces.w } })
+//     .ele('@w', 'tcW')
+//     .att('@w', 'w', fixupColumnWidth(tableCellWidth))
+//     .att('@w', 'type', 'dxa')
+//     // .att('@w', 'tcFitText', '1')
+//     .up();
 
 const buildTableCellProperties = (attributes) => {
   const tableCellPropertiesFragment = fragment({ namespaceAlias: { w: namespaces.w } }).ele(
@@ -1192,11 +1192,6 @@ const buildTableCellProperties = (attributes) => {
           break;
       }
     });
-
-    if (!attributes.width) {
-      const minWidthFragment = buildTableCellMinWidth('8px');
-      tableCellPropertiesFragment.import(minWidthFragment);
-    }
   }
   tableCellPropertiesFragment.up();
 
