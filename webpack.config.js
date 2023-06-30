@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
   resolve: {
     fallback: {
@@ -7,7 +9,7 @@ module.exports = {
       http: false,
       https: false,
       // stream: false,
-      crypto: false,
+      // crypto: false,
       assert: false,
       // tls: false,
       // net: false,
@@ -16,10 +18,15 @@ module.exports = {
       // http: require.resolve('stream-http'),
       // https: require.resolve('https-browserify'),
       stream: require.resolve('stream-browserify'),
-      // crypto: require.resolve('crypto-browserify'),
+      crypto: require.resolve('crypto-browserify'),
       // assert: require.resolve('assert-browserify'),
     },
   },
+  plugins: [
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
+  ],
   optimization: {},
   output: {
     filename: 'htmltodocx.js',
