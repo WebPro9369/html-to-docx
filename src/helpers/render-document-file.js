@@ -11,6 +11,7 @@ import escape from 'escape-html';
 import sizeOf from 'image-size';
 import imageToBase64 from 'image-to-base64';
 import mimeTypes from 'mime-types';
+import { Buffer } from 'buffer';
 
 // FIXME: remove the cyclic dependency
 // eslint-disable-next-line import/no-cycle

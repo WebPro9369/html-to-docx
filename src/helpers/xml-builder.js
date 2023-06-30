@@ -12,6 +12,7 @@ import { cloneDeep } from 'lodash';
 import imageToBase64 from 'image-to-base64';
 import mimeTypes from 'mime-types';
 import sizeOf from 'image-size';
+import { Buffer } from 'buffer';
 
 import namespaces from '../namespaces';
 import {
