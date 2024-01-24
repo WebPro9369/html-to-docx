@@ -11,6 +11,7 @@ import escape from 'escape-html';
 import sizeOf from 'image-size';
 import imageToBase64 from 'image-to-base64';
 import mimeTypes from 'mime-types';
+import { Buffer } from 'buffer';
 
 // FIXME: remove the cyclic dependency
 // eslint-disable-next-line import/no-cycle
@@ -322,7 +323,7 @@ export async function convertVTreeToXML(docxDocumentInstance, vTree, xmlFragment
 }
 
 async function renderDocumentFile(docxDocumentInstance) {
-  const vTree = convertHTML(docxDocumentInstance.htmlString);
+  const vTree = convertHTML(docxDocumentInstance.htmlString?.replace(/&nbsp;/g, ' '));
 
   const xmlFragment = fragment({ namespaceAlias: { w: namespaces.w } });
 
